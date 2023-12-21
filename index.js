@@ -21,13 +21,13 @@ function crearEstructuraProyecto(options) {
             fs.mkdirSync(path.join(rutaProyecto,"public","css"), { recursive: true });
             
             // Archivo css básico
-            fs.writeFileSync(path.join(rutaProyecto,"public/css", "styles.css"), `* {\n\tmargin: 0;\n\tpadding: 0;\n\tbox-sizing: border-box;\n}`)
+            fs.writeFileSync(path.join(rutaProyecto, "/build","public/css", "styles.css"), `* {\n\tmargin: 0;\n\tpadding: 0;\n\tbox-sizing: border-box;\n}`)
 
             // Carpeta js
             fs.mkdirSync(path.join(rutaProyecto,"public","js"), { recursive: true });
             
             // Archivo js básico
-            fs.writeFileSync(path.join(rutaProyecto,"public/js", "index.js"), `
+            fs.writeFileSync(path.join(rutaProyecto, "/build","public/js", "index.js"), `
                 window.addEventListener("load", () => {
                     console.log("JS cargado correctamente");
                 });
@@ -43,7 +43,7 @@ function crearEstructuraProyecto(options) {
                 fs.mkdirSync(path.join(rutaProyecto,"src","controllers"), { recursive: true });
                 // Controlador main
                 let mainController = fs.readFileSync(path.join(__dirname, "template/src/controllers/main-controller-"+ (vista != "ejs" ? "html" : vista) +".js"))
-                fs.writeFileSync(path.join(rutaProyecto,"src/controllers", "main-controller.js"), mainController.toString())
+                fs.writeFileSync(path.join(rutaProyecto, "/build","src/controllers", "main-controller.js"), mainController.toString())
 
                 recursos.forEach((recurso) => {
                     // const rutaEntidad = path.join(rutaProyecto, recurso);
@@ -65,7 +65,7 @@ function crearEstructuraProyecto(options) {
                     //     .replaceAll("await ", "");
                     // }
                     
-                    fs.writeFileSync(path.join(rutaProyecto,"src/controllers", pluralize.plural(recurso)+"-controller.js"), resourceController);
+                    fs.writeFileSync(path.join(rutaProyecto, "/build","src/controllers", pluralize.plural(recurso)+"-controller.js"), resourceController);
                 });
 
             }
@@ -74,7 +74,7 @@ function crearEstructuraProyecto(options) {
             if (almacenamiento == "json") {
                 fs.mkdirSync(path.join(rutaProyecto,"src","data"), { recursive: true });
                 recursos.forEach((recurso) => {
-                    fs.writeFileSync(path.join(rutaProyecto,"src/data", pluralize.plural(recurso)+".json"), "[]");
+                    fs.writeFileSync(path.join(rutaProyecto, "/build","src/data", pluralize.plural(recurso)+".json"), "[]");
                 });
             } else {
                 fs.mkdirSync(path.join(rutaProyecto,"src","database"), { recursive: true });
@@ -85,7 +85,7 @@ function crearEstructuraProyecto(options) {
                 let databaseConfig = fs.readFileSync(path.join(__dirname, "template/src/database/config/config.js"))
                 // Traducción a string
                 databaseConfig = databaseConfig.toString().replaceAll("databasename", "db_"+(nombre.replaceAll("-","_")));
-                fs.writeFileSync(path.join(rutaProyecto,"src/database/config", "config.js"), databaseConfig);
+                fs.writeFileSync(path.join(rutaProyecto, "/build","src/database/config", "config.js"), databaseConfig);
 
                 // Carpeta models dentro de database
                 fs.mkdirSync(path.join(rutaProyecto,"src","database","models"), { recursive: true });
@@ -93,7 +93,7 @@ function crearEstructuraProyecto(options) {
                 let indexModel = fs.readFileSync(path.join(__dirname, "template/src/database/models/index.js"))
                 // Traducción a string
                 indexModel = indexModel.toString()
-                fs.writeFileSync(path.join(rutaProyecto,"src/database/models", "index.js"), indexModel);
+                fs.writeFileSync(path.join(rutaProyecto, "/build","src/database/models", "index.js"), indexModel);
                 recursos.forEach((recurso) => {
                     // Lectura del template
                     let resourceModel = fs.readFileSync(path.join(__dirname, "template/src/database/models/resource.js"))
@@ -102,7 +102,7 @@ function crearEstructuraProyecto(options) {
                     // Adaptación de los recursos al recurso real
                     resourceModel = resourceModel.replaceAll("Resources", pluralize.plural(recurso).charAt(0).toUpperCase() + pluralize.plural(recurso).slice(1)).replaceAll("resources", pluralize.plural(recurso));
                     
-                    fs.writeFileSync(path.join(rutaProyecto,"src/database/models", pluralize.singular(recurso).charAt(0).toUpperCase() + pluralize.singular(recurso).slice(1)+".js"), resourceModel);
+                    fs.writeFileSync(path.join(rutaProyecto, "/build","src/database/models", pluralize.singular(recurso).charAt(0).toUpperCase() + pluralize.singular(recurso).slice(1)+".js"), resourceModel);
                 });
 
                 fs.mkdirSync(path.join(rutaProyecto,"src","database","migration"), { recursive: true });
@@ -118,7 +118,7 @@ function crearEstructuraProyecto(options) {
             let mainRouterText = fs.readFileSync(path.join(__dirname, "template/src/routes/main-router.js"))
             // Traducción a string
             mainRouterText = mainRouterText.toString();
-            fs.writeFileSync(path.join(rutaProyecto,"src/routes", "main-router.js"), mainRouterText);
+            fs.writeFileSync(path.join(rutaProyecto, "/build","src/routes", "main-router.js"), mainRouterText);
 
             recursos.forEach((recurso) => {
                 // Lectura del template
@@ -128,7 +128,7 @@ function crearEstructuraProyecto(options) {
                 // Adaptación de los recursos al recurso real
                 resourceRouter = resourceRouter.replaceAll("resources", pluralize.plural(recurso)).replaceAll("resource", pluralize.singular(recurso));
                 
-                fs.writeFileSync(path.join(rutaProyecto,"src/routes", pluralize.plural(recurso)+"-router.js"), resourceRouter);
+                fs.writeFileSync(path.join(rutaProyecto, "/build","src/routes", pluralize.plural(recurso)+"-router.js"), resourceRouter);
             });
         }
 
@@ -145,7 +145,7 @@ function crearEstructuraProyecto(options) {
                 .replaceAll("resources", pluralize.plural(recurso))
                 .replaceAll("resource", pluralize.singular(recurso));
             
-            fs.writeFileSync(path.join(rutaProyecto,"src/services", pluralize.singular(recurso)+".js"), resourceService);
+            fs.writeFileSync(path.join(rutaProyecto, "/build","src/services", pluralize.singular(recurso)+".js"), resourceService);
         });
 
         // Carpeta views y su contenido
@@ -157,7 +157,7 @@ function crearEstructuraProyecto(options) {
             .replace("<!-- BOOTSTRAP CSS -->", vista == "bootstrap" ? `<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" integrity="sha512-b2QcS5SsA8tZodcDtGRELiGv5SaKSk1vDHDaQRda0htPYWZ6046lr3kJ5bAAQdpV2mmA/4v0wQF9MyU6/pDIAg==" crossorigin="anonymous" referrerpolicy="no-referrer" />` : "")
             .replace("<!-- BOOTSTRAP JS -->", vista == "bootstrap" ? `<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.min.js" integrity="sha512-WW8/jxkELe2CAiE4LvQfwm1rajOS8PHasCCx+knHG0gBHt8EXxS6T6tJRTGuDQVnluuAvMxWF4j8SNFDKceLFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>` : "")
 
-        fs.writeFileSync(path.join(rutaProyecto,"src/views", "home.html"), homeView);
+        fs.writeFileSync(path.join(rutaProyecto, "/build","src/views", "home.html"), homeView);
 
         // Entry point
         let entryPoint = fs.readFileSync(path.join(__dirname, "template/src/app.js"))
@@ -169,24 +169,24 @@ function crearEstructuraProyecto(options) {
             let templateString = `\nconst ${pluralize.plural(recurso)}Router = require('./routes/${pluralize.plural(recurso)}-router');\napp.use(${pluralize.plural(recurso)}Router);\n`;
             entryPoint += templateString;
         })
-        fs.writeFileSync(path.join(rutaProyecto,"src", "app.js"), entryPoint);
+        fs.writeFileSync(path.join(rutaProyecto, "/build","src", "app.js"), entryPoint);
     }
 
     // Package.json
     let packageJson = fs.readFileSync(path.join(__dirname, "template/package.json"));
     // Traducción a string
     packageJson = packageJson.toString().replace("project-name", nombre);
-    fs.writeFileSync(path.join(rutaProyecto, "package.json"), packageJson);
+    fs.writeFileSync(path.join(rutaProyecto, "/build", "package.json"), packageJson);
 
     // .env
     let env = fs.readFileSync(path.join(__dirname, "template/.env"));
     // Traducción a string
-    fs.writeFileSync(path.join(rutaProyecto, ".env"), env);
+    fs.writeFileSync(path.join(rutaProyecto, "/build", ".env"), env);
 
     // .gitignore
     let gitignore = fs.readFileSync(path.join(__dirname, "template/.gitignore"));
     // Traducción a string
-    fs.writeFileSync(path.join(rutaProyecto, ".gitignore"), gitignore);
+    fs.writeFileSync(path.join(rutaProyecto, "/build", ".gitignore"), gitignore);
 }
 
 program
